@@ -1,22 +1,11 @@
-const {test, expect} = require('@playwright/test')
+const { test, expect } = require('@playwright/test');
+const { LoginPage } = require('../pages/LoginPage');
 
-test('Standard login test - Positive Scenario',async({page})=>{
+test('standard user can login successfully', async ({ page }) => {
+    const loginPage = new LoginPage(page);
 
-    // navigate to saucedemo 
-    await page.goto("https://www.saucedemo.com");
+    await loginPage.goto();
+    await loginPage.login('standard_user', 'secret_sauce');
 
-    await page
-        .getByPlaceholder('Username')
-        .fill('standard_user');
-
-    await page
-        .getByPlaceholder('Password')
-        .fill('secret_sauce');
-
-    await page
-        .getByRole('button', { name: 'Login' })
-        .click();
-
-    // assert successful login lands here
     await expect(page).toHaveURL(/inventory/);
-})
+});
