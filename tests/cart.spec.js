@@ -37,6 +37,21 @@ test.describe('Shopping Cart functionality', async() => {
         await expect(page).toHaveURL(/checkout-step-one/);
     })
 
+    test('Add 2 products to Cart', async({ page }) => {
+        await productsPage.addToCart('Sauce Labs Bike Light');
+        await productsPage.addToCart('Sauce Labs Bolt T-Shirt');
+
+        await productsPage.openCart();
+        await expect(page).toHaveURL(/cart/);
+
+        const quantity = await cartPage.getCartQuantity();
+        // expect(quantity).toBeGreaterThan(1);
+        console.log(`Current item count:${quantity}`)
+        
+        await cartPage.checkSelectedItemCart('Sauce Labs Bike Light');
+        await cartPage.checkSelectedItemCart('Sauce Labs Bolt T-Shirt');
+    })
+
     test('Remove one product to the Cart', async({ page }) => {
         await productsPage.addToCart('Sauce Labs BackPack');
         await productsPage.openCart();
