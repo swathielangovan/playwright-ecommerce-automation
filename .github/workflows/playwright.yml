@@ -8,6 +8,8 @@ jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    container: 
+    image: mcr.microsoft.com/playwright:v1.64.0-noble
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
@@ -24,4 +26,5 @@ jobs:
       with:
         name: playwright-report
         path: playwright-report/
-        retention-days: 30
+        retention-days: 7
+        if-no -files-found: ignore
