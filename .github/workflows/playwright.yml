@@ -1,11 +1,15 @@
 
 name: Playwright Tests
 
-on:
+'on':
   push:
-    branches: [main, master]
+    branches:
+      - main
+      - master
   pull_request:
-    branches: [main, master]1
+    branches:
+      - main
+      - master
   workflow_dispatch:
 
 jobs:
@@ -17,11 +21,13 @@ jobs:
       image: mcr.microsoft.com/playwright:v1.64.0-noble
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version: '24'
           cache: npm
 
       - name: Install dependencies
@@ -30,11 +36,11 @@ jobs:
       - name: Run Playwright tests
         run: npx playwright test
 
-      - name: Upload Playwright reports
+      - name: Upload test reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-report
+          name: playwright-test-results
           path: |
             playwright-report/
             test-results/
