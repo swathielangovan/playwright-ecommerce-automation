@@ -4,6 +4,7 @@ const { LoginPage } = require('../pages/LoginPage');
 const { ProductsPage } = require('../pages/ProductsPage');
 const { CartPage } = require('../pages/CartPage');
 const { CheckoutPage } = require('../pages/CheckoutPage');
+const { loginData, customerData, products } = require('../test-data/logindata');
 
 test.describe('Checkout functionality', () => {
      /** @type {import('../pages/ProductsPage').ProductsPage} */
@@ -24,7 +25,7 @@ test.describe('Checkout functionality', () => {
 
         // Step 1: Login
         await loginPage.goto();
-        await loginPage.login('standard_user', 'secret_sauce');
+        await loginPage.login(loginData.validUsername, loginData.validPassword);
         await expect(page).toHaveURL(/inventory/);
 
     })
@@ -32,7 +33,7 @@ test.describe('Checkout functionality', () => {
     test('User can complete a purchase successfully', async ({ page }) => {
         
         // Step 2: Add a product and open the cart
-        await productsPage.addToCart('Sauce Labs Backpack');
+        await productsPage.addToCart(products.backpack);
         await productsPage.openCart();
         await expect(page).toHaveURL(/cart/);
 
@@ -41,7 +42,7 @@ test.describe('Checkout functionality', () => {
         await expect(page).toHaveURL(/checkout-step-one/);
 
         // Step 4: Enter customer information
-        await checkoutPage.enterCustomerInfo('Swathi','Tester','600001');
+        await checkoutPage.enterCustomerInfo(customerData.fName1,customerData.LName1,customerData.postalCode1);
 
         await checkoutPage.continueToOverview();
         await expect(page).toHaveURL(/checkout-step-two/);
@@ -82,7 +83,7 @@ test.describe('Checkout functionality', () => {
         await expect(page).toHaveURL('/checkout-step-one.html')
     });
 
-    test.only('Checkout Cancel should return to the Products Page', async({ page })=> {
+    test('Checkout Cancel should return to the Products Page', async({ page })=> {
         await productsPage.addToCart('Sauce Labs Bike Light');
         await productsPage.openCart();
 
@@ -105,7 +106,6 @@ test.describe('Checkout functionality', () => {
         await checkoutPage.cancelCheckout();
         expect(page).toHaveURL("https://www.saucedemo.com/inventory.html");
 
-        
     })
 
 })
